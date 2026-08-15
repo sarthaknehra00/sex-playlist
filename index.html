@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>सेक्स प्लेलिस्ट</title>
+  <meta name="description" content="A non-stop sensual lounge & rhythm playlist. No signup, no apps — open it and press play." />
+  <meta name="theme-color" content="#000000" />
+  <meta name="color-scheme" content="dark" />
+
+  <!-- Fonts & Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Fullscreen Atmospheric Background (Pure, With Animated Grain) -->
+  <div class="bg" aria-hidden="true">
+    <div class="bg__img"></div>
+    <div class="bg__grain"></div>
+  </div>
+
+  <!-- Direct Native Audio Engine -->
+  <audio id="audio-engine" preload="auto"></audio>
+
+  <!-- Shell Layout -->
+  <main class="shell">
+    <!-- Topbar: Live Dynamic Clock Top-Left & Controls Top-Right -->
+    <header class="topbar">
+      <div class="clock" id="clock" aria-label="Live current time">--:--:-- --</div>
+
+      <nav class="links" aria-label="Controls and Shortcuts">
+        <button class="link" id="btn-fullscreen" title="Toggle Fullscreen (F)" aria-label="Toggle Fullscreen">
+          <svg id="icon-fullscreen" viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true">
+            <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"></path>
+          </svg>
+        </button>
+      </nav>
+    </header>
+
+    <!-- Center Hero Logo -->
+    <div class="logo-wrap">
+      <h1 class="logo">
+        <span class="logo__line">सेक्स प्लेलिस्ट</span>
+      </h1>
+    </div>
+
+    <!-- Bottom Dock: The Iconic Glass Music Pill -->
+    <div class="dock">
+      <div class="music-pill-root">
+        <div class="music-pill" role="region" aria-label="Music Player">
+          <div class="music-pill__sheen" aria-hidden="true"></div>
+
+          <!-- Spinning Vinyl Disc Album Cover -->
+          <div class="music-pill__cover" id="music-cover" title="Click to Play/Pause">
+            <img id="cover-img" src="background.jpg" alt="Album Cover" />
+            <div class="music-pill__cover-hub"></div>
+          </div>
+
+          <!-- Player Metadata & Controls -->
+          <div class="music-pill__body">
+            <div class="music-pill__row">
+              <div class="music-pill__meta">
+                <div class="music-pill__title-wrap">
+                  <span class="music-pill__title" id="track-title">Loading...</span>
+                </div>
+                <div class="music-pill__artist" id="track-artist">Artist</div>
+              </div>
+
+              <!-- Previous / Play-Pause / Next -->
+              <div class="music-pill__controls">
+                <button class="music-pill__btn" id="btn-prev" aria-label="Previous track" title="Previous Track (Left Arrow)">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                    <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"></path>
+                  </svg>
+                </button>
+
+                <button class="music-pill__btn music-pill__btn--play" id="btn-play" aria-label="Play / Pause" title="Play/Pause (Space)">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                    <path d="M8 5v14l11-7z"></path>
+                  </svg>
+                </button>
+
+                <button class="music-pill__btn" id="btn-next" aria-label="Next track" title="Next Track (Right Arrow)">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                    <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Scrubbable Progress Bar & Timestamps -->
+            <div class="music-pill__progress">
+              <span class="music-pill__time" id="time-cur">0:00</span>
+              <div class="music-pill__rail music-pill__rail--seek" id="seek-rail" role="slider" aria-label="Timeline seek">
+                <div class="music-pill__fill" id="seek-fill"></div>
+                <div class="music-pill__knob" id="seek-knob"></div>
+              </div>
+              <span class="music-pill__time" id="time-dur">0:00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Right Language Mode Filter Pill -->
+    <aside class="lang-pill" role="group" aria-label="Language Mode">
+      <button class="lang-btn is-active" data-lang="all" id="btn-lang-all" title="Play All Songs (Mixed)">All</button>
+      <button class="lang-btn" data-lang="en" id="btn-lang-en" title="No Hindi Songs (English Only)">No Hindi</button>
+      <button class="lang-btn" data-lang="hi" id="btn-lang-hi" title="Only Hindi Songs">Only Hindi</button>
+    </aside>
+  </main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
