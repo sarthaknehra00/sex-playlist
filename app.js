@@ -79,35 +79,114 @@ class SensualPlayer {
     });
   }
 
-  // Disable Right Click & Zoom
+  // Hardened Security & Interaction Protections
   initSecurityAndInteractions() {
-    // 1. Disable Right Click Context Menu
+    const overlay = document.getElementById('security-overlay');
+    let isDevToolsOpen = false;
+
+    const setOverlayVisible = (visible) => {
+      if (isDevToolsOpen === visible) return;
+      isDevToolsOpen = visible;
+      if (overlay) {
+        overlay.classList.toggle('is-visible', visible);
+      }
+    };
+
+    // 1. Disable Right Click / Context Menu
     document.addEventListener('contextmenu', (e) => {
       e.preventDefault();
       return false;
-    });
+    }, true);
 
-    // 2. Disable Ctrl + Mouse Wheel Zoom
+    // 2. Block Common DevTools & Source Inspection Shortcuts
+    window.addEventListener('keydown', (e) => {
+      const isCtrlOrCmd = e.ctrlKey || e.metaKey;
+      const isShift = e.shiftKey;
+      const isAlt = e.altKey;
+      const key = (e.key || '').toLowerCase();
+
+      // F12 (DevTools)
+      if (e.key === 'F12' || e.keyCode === 123) {
+        e.preventDefault();
+        e.stopPropagation();
+        setOverlayVisible(true);
+        return false;
+      }
+
+      // Ctrl+Shift+I / Cmd+Option+I (Inspect)
+      // Ctrl+Shift+J / Cmd+Option+J (Console)
+      // Ctrl+Shift+C / Cmd+Option+C (Inspect Element)
+      if (isCtrlOrCmd && (isShift || isAlt) && (key === 'i' || key === 'j' || key === 'c' || e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
+        e.preventDefault();
+        e.stopPropagation();
+        setOverlayVisible(true);
+        return false;
+      }
+
+      // Ctrl+U / Cmd+Option+U (View Source)
+      if (isCtrlOrCmd && (key === 'u' || e.keyCode === 85)) {
+        e.preventDefault();
+        e.stopPropagation();
+        setOverlayVisible(true);
+        return false;
+      }
+
+      // Ctrl+S / Cmd+S (Save Page)
+      if (isCtrlOrCmd && (key === 's' || e.keyCode === 83)) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+
+      // Ctrl + Zoom Shortcuts (Ctrl +, Ctrl -, Ctrl 0)
+      if (isCtrlOrCmd && (
+        key === '+' || key === '-' || key === '=' || key === '0' ||
+        e.code === 'NumpadAdd' || e.code === 'NumpadSubtract'
+      )) {
+        e.preventDefault();
+      }
+    }, true);
+
+    // 3. Disable Ctrl + Mouse Wheel Zoom
     window.addEventListener('wheel', (e) => {
       if (e.ctrlKey) {
         e.preventDefault();
       }
     }, { passive: false });
 
-    // 3. Disable Keyboard Zoom Shortcuts (Ctrl + / -, Ctrl 0)
-    window.addEventListener('keydown', (e) => {
-      if (e.ctrlKey && (
-        e.key === '+' || e.key === '-' || e.key === '=' || e.key === '0' ||
-        e.code === 'NumpadAdd' || e.code === 'NumpadSubtract'
+    // 4. Prevent Casual Image / Element Dragging
+    document.addEventListener('dragstart', (e) => {
+      if (e.target && (
+        e.target.tagName === 'IMG' ||
+        e.target.tagName === 'A' ||
+        e.target.closest('.music-pill__cover') ||
+        e.target.closest('.bg')
       )) {
         e.preventDefault();
+        return false;
       }
     });
 
-    // 4. Disable Gesture Zoom on Touch Devices
+    // 5. Disable Gesture Zoom on Touch Devices
     document.addEventListener('gesturestart', (e) => e.preventDefault());
     document.addEventListener('gesturechange', (e) => e.preventDefault());
     document.addEventListener('gestureend', (e) => e.preventDefault());
+
+    // 6. Lightweight DevTools Detection via Window Dimension Threshold
+    const checkDevTools = () => {
+      const widthDiff = window.outerWidth - window.innerWidth;
+      const heightDiff = window.outerHeight - window.innerHeight;
+      const threshold = 160;
+
+      if (widthDiff > threshold || heightDiff > threshold) {
+        setOverlayVisible(true);
+      } else if (isDevToolsOpen) {
+        setOverlayVisible(false);
+      }
+    };
+
+    window.addEventListener('resize', checkDevTools);
+    setInterval(checkDevTools, 1000);
   }
 
   // Fullscreen Management
